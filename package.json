@@ -1,5 +1,6 @@
 {
   "name": "chunk-url-loader",
+  "version": "0.0.1",
   "bin": "",
   "main": "dist/cjs.js",
   "scripts": {

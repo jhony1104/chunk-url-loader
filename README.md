@@ -87,6 +87,6 @@ the same public path used for other webpack assets is used.
 }
 ```
 
-### Acknowledgement
+## Acknowledgement
 
 This loader is based on the [worker-loader](https://github.com/webpack-contrib/worker-loader)

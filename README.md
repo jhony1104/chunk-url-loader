@@ -4,7 +4,7 @@
   </a>
 </div>
 
-# file-ref-loader
+# chunk-url-loader
 
 loader to get url of compiled file
 
@@ -14,17 +14,17 @@ This module requires a minimum of Node v6.9.0 and Webpack v4.0.0.
 
 ## Getting Started
 
-To begin, you'll need to install `file-ref-loader`:
+To begin, you'll need to install `chunk-url-loader`:
 
 ```console
-$ yarn add -D file-ref-loader
+$ yarn add -D chunk-url-loader
 ```
 
 ### Inlined
 
 ```js
 // App.js
-import Worker from 'file-ref-loader!./script.js';
+import Worker from 'chunk-url-loader!./script.js';
 ```
 
 ### Config
@@ -36,7 +36,7 @@ import Worker from 'file-ref-loader!./script.js';
     rules: [
       {
         test: /script\.js$/,
-        use: { loader: 'file-ref-loader' }
+        use: { loader: 'chunk-url-loader' }
       }
     ]
   }
@@ -66,7 +66,7 @@ hash for caching purposes. When using `name` alone `[hash]` is omitted.
 ```js
 // webpack.config.js
 {
-  loader: 'file-ref-loader',
+  loader: 'chunk-url-loader',
   options: { name: '[hash].js' }
 }
 ```
@@ -82,7 +82,7 @@ the same public path used for other webpack assets is used.
 ```js
 // webpack.config.js
 {
-  loader: 'file-ref-loader'
+  loader: 'chunk-url-loader'
   options: { publicPath: '/scripts/workers/' }
 }
 ```

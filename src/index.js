@@ -44,34 +44,34 @@ export function pitch(request) {
     }
   );
 
-  const worker = {};
+  const chunk = {};
 
-  worker.options = {
+  chunk.options = {
     filename,
     chunkFilename: `[id].${filename}`,
     namedChunkFilename: null,
   };
 
-  worker.compiler = this._compilation.createChildCompiler(
-    'worker',
-    worker.options
+  chunk.compiler = this._compilation.createChildCompiler(
+    'entry',
+    chunk.options
   );
 
-  // Tapable.apply is deprecated in tapable@1.0.0-x.
-  // The plugins should now call apply themselves.
-  new WebWorkerTemplatePlugin(worker.options).apply(worker.compiler);
+  // // Tapable.apply is deprecated in tapable@1.0.0-x.
+  // // The plugins should now call apply themselves.
+  // new WebWorkerTemplatePlugin(chunk.options).apply(chunk.compiler);
 
   if (this.target !== 'webworker' && this.target !== 'web') {
-    new NodeTargetPlugin().apply(worker.compiler);
+    new NodeTargetPlugin().apply(chunk.compiler);
   }
 
   new SingleEntryPlugin(this.context, `!!${request}`, 'main').apply(
-    worker.compiler
+    chunk.compiler
   );
 
   const subCache = `subcache ${__dirname} ${request}`;
 
-  worker.compilation = (compilation) => {
+  chunk.compilation = (compilation) => {
     if (compilation.cache) {
       if (!compilation.cache[subCache]) {
         compilation.cache[subCache] = {};
@@ -81,21 +81,21 @@ export function pitch(request) {
     }
   };
 
-  if (worker.compiler.hooks) {
-    const plugin = { name: 'WorkerLoader' };
+  if (chunk.compiler.hooks) {
+    const plugin = { name: 'ChuckFileLoader' };
 
-    worker.compiler.hooks.compilation.tap(plugin, worker.compilation);
+    chunk.compiler.hooks.compilation.tap(plugin, chunk.compilation);
   } else {
-    worker.compiler.plugin('compilation', worker.compilation);
+    chunk.compiler.plugin('compilation', chunk.compilation);
   }
 
-  worker.compiler.runAsChild((err, entries, compilation) => {
+  chunk.compiler.runAsChild((err, entries, compilation) => {
     if (err) return cb(err);
 
     if (entries[0]) {
-      worker.file = entries[0].files[0];
+      chunk.file = entries[0].files[0];
 
-      return cb(null, `module.exports = ${options.publicPath ? JSON.stringify(options.publicPath) : '__webpack_public_path__'} + ${JSON.stringify(worker.file)};`);
+      return cb(null, `module.exports = ${options.publicPath ? JSON.stringify(options.publicPath) : '__webpack_public_path__'} + ${JSON.stringify(chunk.file)};`);
     }
 
     return cb(null, null);
